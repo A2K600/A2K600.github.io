@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Studio Kosmyk – fryzjer Jeżyce, Poznań</title>
+<meta name="description" content="Strzyżenie, koloryzacja i stylizacja na Jeżycach. Rezerwacja online w 30 sekund.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1E1A1D;
+    --ink-2: #4A4248;
+    --muted: #7C7379;
+    --paper: #FFFFFF;
+    --mist: #F3F1F4;
+    --line: #E3DEE4;
+    --lilac: #B9A7EE;
+    --lilac-soft: #ECE6FC;
+    --violet: #4B2E83;
+    --display: "Syne", "Arial Black", sans-serif;
+    --body: "Manrope", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; font-family: var(--body); font-size: 16.5px; line-height: 1.6; color: var(--ink); background: var(--paper); }
+  a { color: inherit; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 3px solid var(--violet); outline-offset: 2px; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .demo-bar { background: var(--ink); color: #DCD6DB; font-size: 13px; text-align: center; padding: 6px 16px; }
+  .demo-bar a { color: var(--lilac); }
+
+  header .wrap { display: flex; justify-content: space-between; align-items: center; height: 76px; }
+  .logo { font-family: var(--display); font-weight: 800; font-size: 26px; letter-spacing: -0.02em; text-decoration: none; }
+  .logo span { color: var(--violet); }
+  header nav { display: flex; gap: 28px; font-weight: 600; font-size: 15px; }
+  header nav a { text-decoration: none; color: var(--ink-2); }
+  header nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 6px; text-decoration-color: var(--lilac); text-decoration-thickness: 2px; }
+
+  /* hero + rezerwacja */
+  .hero { display: grid; grid-template-columns: .85fr 1.15fr; gap: 48px; padding: 36px 0 80px; align-items: start; }
+  .hero h1 { font-family: var(--display); font-weight: 800; font-size: clamp(36px, 4.3vw, 60px); line-height: 1.02; letter-spacing: -0.03em; margin: 18px 0 22px; }
+  .hero p { font-size: 18px; color: var(--ink-2); max-width: 34ch; margin: 0 0 26px; }
+  .hero-facts { display: grid; gap: 4px; font-size: 15px; color: var(--ink-2); }
+  .hero-facts b { color: var(--ink); }
+
+  .hero > * { min-width: 0; }
+  .book { background: var(--mist); border-radius: 22px; padding: 26px; }
+  .step { padding: 0 0 20px; margin: 0 0 20px; border-bottom: 1px solid var(--line); }
+  .step:last-of-type { border-bottom: 0; margin-bottom: 0; }
+  .step-h { display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px; }
+  .step-h .n { font-family: var(--display); font-weight: 700; font-size: 14px; width: 26px; height: 26px; border-radius: 50%; background: var(--ink); color: var(--paper); display: inline-grid; place-items: center; flex: none; transform: translateY(-2px); }
+  .step-h h2 { font-family: var(--display); font-size: 19px; font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  .step-h .pick { margin-left: auto; font-size: 14px; color: var(--muted); }
+
+  .opts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+  .opt { text-align: left; background: var(--paper); border: 1.5px solid var(--paper); border-radius: 12px; padding: 10px 12px; cursor: pointer; display: flex; justify-content: space-between; gap: 10px; align-items: center; }
+  .opt:hover { border-color: var(--lilac); }
+  .opt[aria-pressed="true"] { border-color: var(--violet); background: var(--lilac-soft); }
+  .opt .t { font-weight: 600; font-size: 15px; line-height: 1.3; }
+  .opt .d { font-size: 13px; color: var(--muted); }
+  .opt .p { font-weight: 700; font-size: 15px; white-space: nowrap; }
+
+  .people { display: flex; gap: 8px; flex-wrap: wrap; }
+  .person { background: var(--paper); border: 1.5px solid var(--paper); border-radius: 999px; padding: 5px 14px 5px 5px; display: flex; align-items: center; gap: 9px; cursor: pointer; font-weight: 600; font-size: 15px; }
+  .person:hover { border-color: var(--lilac); }
+  .person[aria-pressed="true"] { border-color: var(--violet); background: var(--lilac-soft); }
+  .mono { width: 32px; height: 32px; border-radius: 50%; background: var(--lilac); color: var(--ink); display: grid; place-items: center; font-family: var(--display); font-weight: 700; font-size: 14px; }
+  .mono.any { background: var(--paper); border: 1.5px dashed var(--muted); }
+
+  .days { display: flex; gap: 6px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+  .day { flex: none; width: 58px; background: var(--paper); border: 1.5px solid var(--paper); border-radius: 12px; padding: 7px 0; text-align: center; cursor: pointer; }
+  .day:hover:not(:disabled) { border-color: var(--lilac); }
+  .day .w { font-size: 12px; color: var(--muted); display: block; }
+  .day .dn { font-family: var(--display); font-weight: 700; font-size: 20px; display: block; line-height: 1.15; }
+  .day .m { font-size: 11px; color: var(--muted); display: block; }
+  .day[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .day[aria-pressed="true"] .w, .day[aria-pressed="true"] .m { color: #CFC8CE; }
+  .day:disabled { opacity: .38; cursor: not-allowed; }
+
+  .slots { display: grid; grid-template-columns: repeat(auto-fill, minmax(68px, 1fr)); gap: 6px; }
+  .slot { background: var(--paper); border: 1.5px solid var(--paper); border-radius: 10px; padding: 8px 0; font-weight: 600; font-size: 15px; cursor: pointer; font-variant-numeric: tabular-nums; }
+  .slot:hover:not(:disabled) { border-color: var(--lilac); }
+  .slot[aria-pressed="true"] { background: var(--violet); color: #fff; border-color: var(--violet); }
+  .slot:disabled { color: #B9B1B7; text-decoration: line-through; cursor: not-allowed; background: transparent; border-color: var(--line); }
+  .empty { grid-column: 1 / -1; font-size: 15px; color: var(--muted); margin: 0; }
+
+  .contact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+  .contact-row label { font-size: 13px; font-weight: 600; display: grid; gap: 4px; }
+  .contact-row input { font: inherit; font-size: 16px; padding: 10px 12px; border-radius: 10px; border: 1.5px solid var(--line); background: var(--paper); }
+  .contact-row input:focus { outline: none; border-color: var(--violet); }
+  .summary { font-size: 15px; color: var(--ink-2); margin: 0 0 12px; min-height: 24px; }
+  .summary b { color: var(--ink); }
+  .cta { width: 100%; background: var(--ink); color: var(--paper); border: 0; border-radius: 12px; padding: 14px; font-weight: 700; font-size: 16px; cursor: pointer; }
+  .cta:hover:not(:disabled) { background: var(--violet); }
+  .cta:disabled { background: #CFC8CE; cursor: not-allowed; }
+  .err { color: #B3261E; font-size: 14px; margin: 0 0 10px; }
+  .done { display: none; text-align: left; padding: 8px 4px; }
+  .done h2 { font-family: var(--display); font-size: 30px; margin: 0 0 8px; letter-spacing: -0.02em; }
+  .done p { margin: 0 0 16px; color: var(--ink-2); }
+  .done .card { background: var(--paper); border-radius: 14px; padding: 16px 18px; margin-bottom: 16px; display: grid; gap: 4px; }
+  .book.sent .flow { display: none; }
+  .book.sent .done { display: block; }
+  .link-btn { background: none; border: 0; padding: 0; color: var(--violet); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+
+  /* sekcje */
+  section.blk { padding: 84px 0; }
+  .blk h2.big { font-family: var(--display); font-weight: 800; font-size: clamp(34px, 4.4vw, 54px); letter-spacing: -0.03em; line-height: 1.02; margin: 0 0 36px; }
+  .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 0 64px; }
+  .menu h3 { font-family: var(--display); font-size: 21px; margin: 0 0 6px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); }
+  .menu dl { margin: 0 0 32px; }
+  .menu .row { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-bottom: 1px solid var(--line); }
+  .menu dt { font-weight: 600; }
+  .menu dt small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+  .menu dd { margin: 0; font-weight: 700; white-space: nowrap; }
+
+  .team-sec { background: var(--mist); }
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .member .mono { width: 76px; height: 76px; font-size: 28px; margin-bottom: 16px; }
+  .member h3 { font-family: var(--display); font-size: 22px; margin: 0 0 4px; }
+  .member .role { font-weight: 600; color: var(--violet); font-size: 15px; margin: 0 0 8px; }
+  .member p { margin: 0 0 14px; color: var(--ink-2); max-width: 34ch; }
+
+  .quotes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 36px; }
+  .quotes blockquote { margin: 0; font-size: 19px; line-height: 1.45; font-weight: 500; }
+  .quotes cite { display: block; font-style: normal; font-size: 14px; color: var(--muted); margin-top: 12px; font-weight: 400; }
+  .note { font-size: 14px; color: var(--muted); margin: -20px 0 32px; }
+
+  .visit { background: var(--ink); color: var(--paper); }
+  .visit .wrap { display: grid; grid-template-columns: 1fr 1.2fr; gap: 48px; }
+  .visit h2.big { color: var(--paper); }
+  .visit dl { display: grid; grid-template-columns: auto 1fr; gap: 10px 28px; margin: 0 0 28px; }
+  .visit dt { color: #A9A0A7; }
+  .visit dd { margin: 0; }
+  .visit .phone { font-family: var(--display); font-weight: 700; font-size: 34px; text-decoration: none; display: inline-block; margin-bottom: 22px; color: var(--lilac); }
+  .map { width: 100%; height: 340px; border: 0; border-radius: 18px; background: #2C262A; }
+  footer { background: var(--ink); color: #8F858C; font-size: 14px; padding: 0 0 28px; }
+  footer .wrap { border-top: 1px solid #3A3338; padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 960px) {
+    header nav { display: none; }
+    .hero { grid-template-columns: 1fr; gap: 28px; padding-top: 16px; }
+    .menu, .visit .wrap { grid-template-columns: 1fr; }
+    .team, .quotes { grid-template-columns: 1fr; gap: 36px; }
+    section.blk { padding: 60px 0; }
+  }
+  @media (max-width: 520px) {
+    .book { padding: 18px 14px; border-radius: 18px; }
+    .opts, .contact-row { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+</style>
+</head>
+<body>
+<div class="demo-bar">Strona demonstracyjna z portfolio. Studio Kosmyk to firma fikcyjna. <a href="../../">Wróć do portfolio</a></div>
+
+<header>
+  <div class="wrap">
+    <a class="logo" href="#">Kosmyk<span>.</span></a>
+    <nav aria-label="Główna">
+      <a href="#cennik">Cennik</a>
+      <a href="#zespol">Zespół</a>
+      <a href="#opinie">Opinie</a>
+      <a href="#wizyta">Dojazd</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <section class="hero" aria-labelledby="h1">
+      <div>
+        <h1 id="h1">Fryzjer na Jeżycach. Wolne terminy od&nbsp;razu.</h1>
+        <p>Strzyżenie, koloryzacja i stylizacja. Wybierz usługę, osobę i godzinę. Bez dzwonienia i czekania na odpowiedź.</p>
+        <div class="hero-facts">
+          <span><b>Pon–pt</b> 9:00–20:00 · <b>Sob</b> 9:00–15:00</span>
+          <span>ul. Przykładowa 5, Poznań-Jeżyce</span>
+        </div>
+      </div>
+
+      <div class="book" id="book" aria-label="Rezerwacja wizyty">
+        <div class="flow">
+          <div class="step">
+            <div class="step-h"><span class="n">1</span><h2>Usługa</h2><span class="pick" id="pickService"></span></div>
+            <div class="opts" id="services"></div>
+          </div>
+          <div class="step">
+            <div class="step-h"><span class="n">2</span><h2>Do kogo</h2></div>
+            <div class="people" id="people"></div>
+          </div>
+          <div class="step">
+            <div class="step-h"><span class="n">3</span><h2>Dzień i godzina</h2><span class="pick" id="pickDay"></span></div>
+            <div class="days" id="days"></div>
+            <div style="height:12px"></div>
+            <div class="slots" id="slots"></div>
+          </div>
+          <div class="step">
+            <div class="step-h"><span class="n">4</span><h2>Twoje dane</h2></div>
+            <div class="contact-row">
+              <label>Imię<input id="name" autocomplete="given-name" placeholder="Ola"></label>
+              <label>Telefon<input id="phone" type="tel" autocomplete="tel" placeholder="600 000 000"></label>
+            </div>
+            <p class="summary" id="summary" aria-live="polite"></p>
+            <p class="err" id="err" role="alert"></p>
+            <button class="cta" id="confirm" type="button" disabled>Zarezerwuj wizytę</button>
+          </div>
+        </div>
+        <div class="done" role="status" aria-live="polite">
+          <h2>Zarezerwowano.</h2>
+          <p>Dzień przed wizytą wyślemy SMS z przypomnieniem. Jeśli coś się zmieni, możesz odwołać wizytę z linku w SMS-ie.</p>
+          <div class="card" id="doneCard"></div>
+          <button class="link-btn" id="again" type="button">Zarezerwuj kolejną wizytę</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <section class="blk" id="cennik" aria-labelledby="h-c">
+    <div class="wrap">
+      <h2 class="big" id="h-c">Cennik</h2>
+      <div class="menu">
+        <div>
+          <h3>Strzyżenie</h3>
+          <dl>
+            <div class="row"><dt>Strzyżenie damskie<small>z myciem i modelowaniem</small></dt><dd>od 120 zł</dd></div>
+            <div class="row"><dt>Strzyżenie męskie<small>maszynka i nożyczki</small></dt><dd>80 zł</dd></div>
+            <div class="row"><dt>Grzywka<small>między wizytami</small></dt><dd>30 zł</dd></div>
+          </dl>
+          <h3>Stylizacja</h3>
+          <dl>
+            <div class="row"><dt>Modelowanie</dt><dd>70 zł</dd></div>
+            <div class="row"><dt>Upięcie okolicznościowe</dt><dd>od 180 zł</dd></div>
+          </dl>
+        </div>
+        <div>
+          <h3>Koloryzacja</h3>
+          <dl>
+            <div class="row"><dt>Koloryzacja jednolita<small>z odrostem, włosy do ramion</small></dt><dd>od 220 zł</dd></div>
+            <div class="row"><dt>Refleksy / pasemka</dt><dd>od 320 zł</dd></div>
+            <div class="row"><dt>Balayage<small>z tonowaniem i pielęgnacją</small></dt><dd>od 480 zł</dd></div>
+            <div class="row"><dt>Tonowanie</dt><dd>140 zł</dd></div>
+          </dl>
+          <h3>Pielęgnacja</h3>
+          <dl>
+            <div class="row"><dt>Rytuał regenerujący</dt><dd>110 zł</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk team-sec" id="zespol" aria-labelledby="h-z">
+    <div class="wrap">
+      <h2 class="big" id="h-z">Zespół</h2>
+      <div class="team">
+        <div class="member"><div class="mono" aria-hidden="true">OL</div><h3>Ola</h3><p class="role">Koloryzacja, balayage</p><p>Dobiera kolor do typu urody i pokazuje, jak dbać o niego w domu.</p></div>
+        <div class="member"><div class="mono" aria-hidden="true">KA</div><h3>Kamil</h3><p class="role">Strzyżenie męskie, fade</p><p>Szybkie, precyzyjne strzyżenia. Wizyta zwykle mieści się w 45 minutach.</p></div>
+        <div class="member"><div class="mono" aria-hidden="true">MA</div><h3>Magda</h3><p class="role">Strzyżenie damskie, upięcia</p><p>Specjalistka od cięć na kręconych włosach i fryzur na wesela.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk" id="opinie" aria-labelledby="h-o">
+    <div class="wrap">
+      <h2 class="big" id="h-o">Opinie</h2>
+      <p class="note">Przykładowe opinie do celów demonstracyjnych.</p>
+      <div class="quotes">
+        <blockquote>Zarezerwowałam wieczorem z telefonu, a rano już siedziałam na fotelu.<cite>Karolina, balayage u Oli</cite></blockquote>
+        <blockquote>Pierwszy fryzjer, który umie ostrzyc moje kręcone włosy na sucho.<cite>Natalia, strzyżenie u Magdy</cite></blockquote>
+        <blockquote>Krótko, konkretnie i bez czekania. Przychodzę co trzy tygodnie.<cite>Bartek, strzyżenie u Kamila</cite></blockquote>
+      </div>
+    </div>
+  </section>
+
+  <section class="blk visit" id="wizyta" aria-labelledby="h-w">
+    <div class="wrap">
+      <div>
+        <h2 class="big" id="h-w">Wizyta</h2>
+        <a class="phone" href="tel:+48600000000">600 000 000</a>
+        <dl>
+          <dt>Adres</dt><dd>ul. Przykładowa 5, 60-000 Poznań (Jeżyce)</dd>
+          <dt>Pon–pt</dt><dd>9:00–20:00</dd>
+          <dt>Sobota</dt><dd>9:00–15:00</dd>
+          <dt>Dojazd</dt><dd>Tramwaj do przystanku Rynek Jeżycki, 3 minuty pieszo</dd>
+        </dl>
+      </div>
+      <iframe class="map" title="Mapa – Jeżyce, Poznań" loading="lazy"
+        src="https://www.openstreetmap.org/export/embed.html?bbox=16.8930%2C52.4040%2C16.9230%2C52.4170&amp;layer=mapnik"></iframe>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>© 2026 Studio Kosmyk (firma fikcyjna)</span><span>Projekt demonstracyjny z portfolio</span></div></footer>
+
+<script>
+const SERVICES = [
+  { id: 'cut-w', name: 'Strzyżenie damskie', min: 60, price: 'od 120 zł', who: ['ola', 'magda'] },
+  { id: 'cut-m', name: 'Strzyżenie męskie', min: 30, price: '80 zł', who: ['kamil', 'magda'] },
+  { id: 'color', name: 'Koloryzacja', min: 120, price: 'od 220 zł', who: ['ola'] },
+  { id: 'balay', name: 'Balayage', min: 180, price: 'od 480 zł', who: ['ola'] },
+  { id: 'style', name: 'Modelowanie', min: 30, price: '70 zł', who: ['ola', 'magda', 'kamil'] },
+  { id: 'care', name: 'Rytuał regenerujący', min: 60, price: '110 zł', who: ['magda', 'ola'] },
+];
+const PEOPLE = { ola: 'Ola', kamil: 'Kamil', magda: 'Magda' };
+const DAYS_W = ['nd', 'pn', 'wt', 'śr', 'cz', 'pt', 'sb'];
+const MONTHS = ['sty', 'lut', 'mar', 'kwi', 'maj', 'cze', 'lip', 'sie', 'wrz', 'paź', 'lis', 'gru'];
+const state = { service: null, person: 'any', day: null, slot: null, slotWho: null };
+
+const $ = (id) => document.getElementById(id);
+const dur = (m) => m >= 60 ? `${Math.floor(m / 60)} h${m % 60 ? ' ' + (m % 60) + ' min' : ''}` : `${m} min`;
+const key = (d) => d.toISOString().slice(0, 10);
+const hhmm = (t) => `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+
+// deterministyczny "grafik" – część terminów zajęta, zawsze tak samo dla danego dnia i osoby
+function busy(person, d, t) {
+  let h = 0; const s = person + key(d) + t;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+  return h % 100 < 42;
+}
+function hours(d) { const w = d.getDay(); return w === 0 ? null : w === 6 ? [540, 900] : [540, 1200]; }
+
+function freeSlots(d, svc, person) {
+  const h = hours(d); if (!h || !svc) return [];
+  const who = person === 'any' ? svc.who : [person];
+  const now = new Date(), out = [];
+  for (let t = h[0]; t + svc.min <= h[1]; t += 30) {
+    if (key(d) === key(now) && t <= now.getHours() * 60 + now.getMinutes() + 60) continue;
+    const ok = who.find(p => { for (let x = t; x < t + svc.min; x += 30) if (busy(p, d, x)) return false; return true; });
+    out.push({ t, who: ok || null });
+  }
+  return out;
+}
+
+function renderServices() {
+  $('services').innerHTML = '';
+  SERVICES.forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'opt'; b.setAttribute('aria-pressed', state.service === s);
+    b.innerHTML = `<span><span class="t">${s.name}</span><br><span class="d">${dur(s.min)}</span></span><span class="p">${s.price}</span>`;
+    b.onclick = () => { state.service = s; if (state.person !== 'any' && !s.who.includes(state.person)) state.person = 'any'; state.slot = null; render(); };
+    $('services').appendChild(b);
+  });
+}
+function renderPeople() {
+  $('people').innerHTML = '';
+  const list = [['any', 'Dowolna osoba']].concat(Object.entries(PEOPLE).filter(([id]) => !state.service || state.service.who.includes(id)));
+  list.forEach(([id, name]) => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'person'; b.setAttribute('aria-pressed', state.person === id);
+    b.innerHTML = `<span class="mono${id === 'any' ? ' any' : ''}" aria-hidden="true">${id === 'any' ? '' : name.slice(0, 2).toUpperCase()}</span>${name}`;
+    b.onclick = () => { state.person = id; state.slot = null; render(); };
+    $('people').appendChild(b);
+  });
+}
+function renderDays() {
+  const box = $('days'); const keep = box.scrollLeft; box.innerHTML = '';
+  const today = new Date(); today.setHours(12, 0, 0, 0);
+  for (let i = 0; i < 21; i++) {
+    const d = new Date(today); d.setDate(today.getDate() + i);
+    const closed = !hours(d);
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'day'; b.disabled = closed;
+    b.setAttribute('aria-pressed', state.day && key(state.day) === key(d));
+    b.setAttribute('aria-label', d.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' }) + (closed ? ', zamknięte' : ''));
+    b.innerHTML = `<span class="w">${i === 0 ? 'dziś' : DAYS_W[d.getDay()]}</span><span class="dn">${d.getDate()}</span><span class="m">${MONTHS[d.getMonth()]}</span>`;
+    b.onclick = () => { state.day = d; state.slot = null; render(); };
+    box.appendChild(b);
+  }
+  box.scrollLeft = keep;
+}
+function renderSlots() {
+  const box = $('slots'); box.innerHTML = '';
+  if (!state.service) { box.innerHTML = '<p class="empty">Najpierw wybierz usługę.</p>'; return; }
+  if (!state.day) { box.innerHTML = '<p class="empty">Wybierz dzień, a pokażemy wolne godziny.</p>'; return; }
+  const slots = freeSlots(state.day, state.service, state.person);
+  if (!slots.some(s => s.who)) { box.innerHTML = '<p class="empty">Ten dzień jest już zajęty. Wybierz inny albo „Dowolna osoba”.</p>'; return; }
+  slots.forEach(s => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'slot'; b.textContent = hhmm(s.t); b.disabled = !s.who;
+    b.setAttribute('aria-pressed', state.slot === s.t);
+    if (!s.who) b.setAttribute('aria-label', hhmm(s.t) + ', zajęte');
+    b.onclick = () => { state.slot = s.t; state.slotWho = s.who; render(); };
+    box.appendChild(b);
+  });
+}
+function summaryText() {
+  if (!state.service || !state.day || state.slot === null) return '';
+  const who = PEOPLE[state.slotWho];
+  const day = state.day.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' });
+  return `<b>${state.service.name}</b> u ${who === 'Kamil' ? 'Kamila' : who === 'Ola' ? 'Oli' : 'Magdy'}, <b>${day}, ${hhmm(state.slot)}–${hhmm(state.slot + state.service.min)}</b>`;
+}
+function render() {
+  renderServices(); renderPeople(); renderDays(); renderSlots();
+  $('pickService').textContent = state.service ? `${dur(state.service.min)}, ${state.service.price}` : '';
+  $('pickDay').textContent = state.day ? state.day.toLocaleDateString('pl-PL', { weekday: 'long', day: 'numeric', month: 'long' }) : '';
+  $('summary').innerHTML = summaryText();
+  $('confirm').disabled = !summaryText();
+}
+$('confirm').onclick = () => {
+  const name = $('name').value.trim(), phone = $('phone').value.replace(/\D/g, '');
+  if (!name) { $('err').textContent = 'Wpisz imię, żebyśmy wiedzieli, kogo się spodziewać.'; $('name').focus(); return; }
+  if (phone.length < 9) { $('err').textContent = 'Wpisz numer telefonu (9 cyfr). Na niego wyślemy przypomnienie.'; $('phone').focus(); return; }
+  $('err').textContent = '';
+  $('doneCard').innerHTML = `<span>${summaryText()}</span><span>${name}, tel. ${$('phone').value}</span>`;
+  $('book').classList.add('sent');
+};
+$('again').onclick = () => { Object.assign(state, { service: null, person: 'any', day: null, slot: null }); $('book').classList.remove('sent'); render(); };
+
+// start: pierwszy otwarty dzień
+(() => { const d = new Date(); d.setHours(12, 0, 0, 0); while (!hours(d)) d.setDate(d.getDate() + 1); state.day = d; })();
+render();
+</script>
+</body>
+</html>

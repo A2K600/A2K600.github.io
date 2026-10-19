@@ -215,12 +215,13 @@
         <div class="price"><span lang="pl">od 400 zł</span><span lang="en">from $100</span><small><span lang="pl">3–7 dni</span><span lang="en">3–7 days</span></small></div>
       </div>
       <div class="service">
-        <h3><span lang="pl">Dashboardy</span><span lang="en">Dashboards</span></h3>
+        <h3><span lang="pl">Dashboardy i analizy</span><span lang="en">Dashboards & analysis</span></h3>
         <div>
           <p><span lang="pl">Sprzedaż, magazyn albo wyniki zespołu na jednej stronie, z filtrami.</span><span lang="en">Sales, stock or team results on one page, with filters.</span></p>
           <ul>
             <li><span lang="pl">działa w przeglądarce, bez instalowania programów</span><span lang="en">runs in the browser, nothing to install</span></li>
             <li><span lang="pl">odświeżanie z Twoich plików albo arkusza Google</span><span lang="en">refreshes from your files or Google Sheet</span></li>
+            <li><span lang="pl">analiza klientów i sprzedaży z konkretnymi wnioskami</span><span lang="en">customer and sales analysis with clear takeaways</span></li>
           </ul>
         </div>
         <div class="price"><span lang="pl">od 600 zł</span><span lang="en">from $150</span><small><span lang="pl">5–10 dni</span><span lang="en">5–10 days</span></small></div>
@@ -267,6 +268,46 @@
       </article>
 
       <article class="project">
+        <a class="shot" href="projekty/faktury-pdf/"><img src="assets/faktury.jpg" alt="Faktura PDF i zestawienie faktur w Excelu z podświetlonymi błędami" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Faktury PDF → zestawienie w Excelu</span><span lang="en">PDF invoices → Excel summary</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Kilkadziesiąt faktur PDF miesięcznie od różnych dostawców, każda w innym układzie. Ktoś przepisuje je ręcznie i przegapia błędy.</span><span lang="en">Dozens of PDF invoices a month from different suppliers, each with its own layout. Someone retypes them by hand and misses mistakes.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Skrypt odczytuje faktury, wyciąga NIP, numer, datę i kwoty, a potem sprawdza sumy, NIP-y, duplikaty i skany bez tekstu.</span><span lang="en">A script reads the invoices, extracts tax ID, number, date and amounts, then checks totals, tax IDs, duplicates and image-only scans.</span></dd>
+            <dt><span lang="pl">Efekt</span><span lang="en">Result</span></dt>
+            <dd><span lang="pl">24 faktury w kilka sekund, 4 problemy wyłapane automatycznie, zanim trafiły do księgowości.</span><span lang="en">24 invoices in seconds, with 4 problems caught automatically before reaching the accountant.</span></dd>
+          </dl>
+          <ul class="tags"><li>Python</li><li>pdfplumber</li><li>regex</li><li>Excel</li></ul>
+          <div class="links">
+            <a href="projekty/faktury-pdf/"><span lang="pl">Opis i kod</span><span lang="en">Write-up and code</span></a>
+            <a href="projekty/faktury-pdf/zestawienie_faktur.xlsx" download><span lang="pl">Pobierz zestawienie (.xlsx)</span><span lang="en">Download summary (.xlsx)</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <a class="shot" href="projekty/segmentacja-rfm/"><img src="assets/rfm.jpg" alt="Raport segmentacji klientów z wykresem udziału segmentów w przychodzie" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Segmentacja klientów sklepu (RFM)</span><span lang="en">Customer segmentation (RFM)</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Sklep internetowy wysyła wszystkim te same rabaty, a przychód spada i nie wiadomo dlaczego.</span><span lang="en">An online shop sends the same discounts to everyone while revenue keeps falling, and nobody knows why.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Analiza 1 800 klientów: kiedy kupili, jak często i za ile. Wynik to 9 segmentów z rekomendacjami i lista klientów do kampanii odzyskującej.</span><span lang="en">Analysis of 1,800 customers by recency, frequency and spend, resulting in 9 segments with recommendations and a win-back campaign list.</span></dd>
+            <dt><span lang="pl">Efekt</span><span lang="en">Result</span></dt>
+            <dd><span lang="pl">Okazało się, że 16% najcenniejszych klientów przestało kupować, co wyjaśnia spadek przychodu o połowę.</span><span lang="en">Revealed that the 16% most valuable customers had stopped buying, which explains revenue dropping by half.</span></dd>
+          </dl>
+          <ul class="tags"><li>Python</li><li>pandas</li><li><span lang="pl">analiza danych</span><span lang="en">data analysis</span></li></ul>
+          <div class="links">
+            <a href="projekty/segmentacja-rfm/"><span lang="pl">Otwórz raport</span><span lang="en">Open report</span></a>
+            <a href="projekty/segmentacja-rfm/segmenty_klientow.xlsx" download><span lang="pl">Pobierz segmenty (.xlsx)</span><span lang="en">Download segments (.xlsx)</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
         <a class="shot" href="projekty/dashboard/"><img src="assets/dashboard.jpg" alt="Dashboard sprzedaży z filtrami, wykresem liniowym i rankingiem produktów" loading="lazy"></a>
         <div>
           <h3><span lang="pl">Interaktywny dashboard sprzedaży</span><span lang="en">Interactive sales dashboard</span></h3>
@@ -296,6 +337,23 @@
           <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>RWD</li></ul>
           <div class="links">
             <a href="projekty/warsztat/"><span lang="pl">Otwórz stronę</span><span lang="en">Open website</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <a class="shot" href="projekty/salon/"><img src="assets/salon.jpg" alt="Strona salonu fryzjerskiego z rezerwacją: wybór usługi, dnia i godziny" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Salon fryzjerski z rezerwacją online</span><span lang="en">Hair salon with online booking</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Salon umawia wizyty tylko przez telefon, a w trakcie pracy nikt nie ma czasu go odbierać.</span><span lang="en">The salon books only by phone, and nobody can answer it while working.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Strona z rezerwacją w 4 krokach: usługa, fryzjer, dzień, godzina. Wolne terminy uwzględniają czas trwania usługi.</span><span lang="en">A site with 4-step booking: service, stylist, day, time. Available slots account for how long each service takes.</span></dd>
+          </dl>
+          <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>RWD</li></ul>
+          <div class="links">
+            <a href="projekty/salon/"><span lang="pl">Otwórz stronę</span><span lang="en">Open website</span></a>
           </div>
         </div>
       </article>
@@ -334,12 +392,13 @@
   // ====== TWOJE DANE – zmień tutaj ======
   const EMAIL = "antonikryk2310@gmail.com";
   const GITHUB = "https://github.com/A2K600";        // np. https://github.com/antonikryk
-  const LINKEDIN = "www.linkedin.com/in/antonikryk";                          // zostaw puste, jeśli nie masz
+  const LINKEDIN = "https://www.linkedin.com/in/antonikryk";                          // zostaw puste, jeśli nie masz
   // ======================================
 
   document.querySelectorAll('.js-mail').forEach(a => { a.href = 'mailto:' + EMAIL; if (a.classList.contains('mail')) a.textContent = EMAIL; });
-  document.querySelectorAll('.js-github').forEach(a => a.href = GITHUB);
-  document.querySelectorAll('.js-linkedin').forEach(a => LINKEDIN ? a.href = LINKEDIN : a.remove());
+  const fullUrl = (u) => /^https?:\/\//.test(u) ? u : 'https://' + u;   // dopisuje https://, jeśli go brakuje
+  document.querySelectorAll('.js-github').forEach(a => a.href = fullUrl(GITHUB));
+  document.querySelectorAll('.js-linkedin').forEach(a => LINKEDIN ? a.href = fullUrl(LINKEDIN) : a.remove());
 
   // ----- przełącznik języka -----
   const setLang = (l) => {
