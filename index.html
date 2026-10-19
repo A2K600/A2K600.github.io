@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="pl" class="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Antoni Kryk – automatyzacja danych i strony www</title>
+<meta name="description" content="Porządkuję dane, automatyzuję raporty w Excelu i Pythonie oraz robię strony dla małych firm. Poznań i zdalnie.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  /* ================================================================
+     DANE KONTAKTOWE – zmień tylko te trzy linie w sekcji <script> na dole:
+     EMAIL, GITHUB, LINKEDIN
+     ================================================================ */
+  :root {
+    --ink: #15233B;
+    --ink-2: #3B4A60;
+    --muted: #5E6A7C;
+    --paper: #F6F7F9;
+    --white: #FFFFFF;
+    --rule: #D9DEE5;
+    --green: #1E7F4F;
+    --green-deep: #155C39;
+    --cell: #FFF1B8;
+    --bad: #B3261E;
+    --sans: "IBM Plex Sans", Arial, sans-serif;
+    --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 17px; line-height: 1.6; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; border-radius: 2px; }
+  .wrap { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
+  html.pl [lang="en"], html.en [lang="pl"] { display: none !important; }
+
+  /* nagłówek */
+  .top { display: flex; justify-content: space-between; align-items: center; height: 72px; }
+  .name { font-weight: 600; text-decoration: none; font-size: 17px; }
+  .top nav { display: flex; align-items: center; gap: 24px; font-size: 15px; }
+  .top nav a { text-decoration: none; color: var(--ink-2); }
+  .top nav a:hover { color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+  .lang { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; }
+  .lang button { font: inherit; font-size: 13px; font-weight: 500; background: var(--white); color: var(--ink-2); border: 0; padding: 4px 10px; cursor: pointer; }
+  .lang button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: 1fr 1.05fr; gap: 56px; align-items: center; padding: 48px 0 88px; }
+  .hero h1 { font-size: clamp(36px, 4.6vw, 54px); line-height: 1.08; letter-spacing: -0.02em; font-weight: 700; margin: 0 0 20px; }
+  .hero p.lead { font-size: 19px; color: var(--ink-2); max-width: 36ch; margin: 0 0 30px; }
+  .ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+  .btn { display: inline-block; font-weight: 600; font-size: 16px; text-decoration: none; padding: 12px 20px; border-radius: 6px; }
+  .btn-main { background: var(--green); color: var(--white); }
+  .btn-main:hover { background: var(--green-deep); }
+  .btn-ghost { border: 1.5px solid var(--ink); }
+  .btn-ghost:hover { background: var(--white); }
+  .avail { margin-top: 26px; font-size: 15px; color: var(--muted); display: flex; align-items: center; gap: 10px; }
+  .avail::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(30,127,79,.15); }
+
+  /* arkusz: przed / po */
+  .sheet { background: var(--white); border: 1px solid var(--rule); border-radius: 10px; box-shadow: 0 30px 60px -36px rgba(21,35,59,.45); overflow: hidden; }
+  .sheet-bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 14px; border-bottom: 1px solid var(--rule); background: #FBFBFC; }
+  .sheet-bar .file { font-family: var(--mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; flex: none; }
+  .seg button { font: inherit; font-size: 13px; border: 0; background: var(--white); color: var(--ink-2); padding: 4px 10px; cursor: pointer; }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--white); }
+  .sheet table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 13px; }
+  .sheet th { font-weight: 500; color: var(--muted); text-align: left; background: #F1F3F6; padding: 6px 10px; border-bottom: 1px solid var(--rule); border-right: 1px solid var(--rule); }
+  .sheet td { padding: 7px 10px; border-bottom: 1px solid #EEF1F4; border-right: 1px solid #EEF1F4; white-space: nowrap; transition: background-color .6s ease; }
+  .sheet th:last-child, .sheet td:last-child { border-right: 0; }
+  .sheet td.num { text-align: right; }
+  .sheet td.messy { color: var(--bad); }
+  .sheet td.fixed { background: var(--cell); }
+  .sheet tr.dup td { text-decoration: line-through; color: #9AA3B0; }
+  .sheet tr.gone { display: none; }
+  .sheet-foot { display: flex; justify-content: space-between; gap: 12px; padding: 10px 14px; font-size: 13px; color: var(--muted); border-top: 1px solid var(--rule); background: #FBFBFC; }
+  .sheet-foot b { color: var(--ink); font-weight: 600; }
+  .replay { font: inherit; font-size: 13px; color: var(--green); background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+  /* sekcje */
+  section.block { padding: 80px 0; border-top: 1px solid var(--rule); }
+  .block h2 { font-size: clamp(28px, 3.2vw, 38px); letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 12px; }
+  .block .intro { color: var(--ink-2); max-width: 60ch; margin: 0 0 40px; font-size: 18px; }
+
+  /* usługi */
+  .services { display: grid; gap: 0; border-top: 2px solid var(--ink); }
+  .service { display: grid; grid-template-columns: 1.1fr 1.6fr .7fr; gap: 28px; padding: 26px 0; border-bottom: 1px solid var(--rule); align-items: start; }
+  .service h3 { font-size: 21px; margin: 0; line-height: 1.3; }
+  .service p { margin: 0; color: var(--ink-2); }
+  .service ul { margin: 10px 0 0; padding-left: 18px; color: var(--ink-2); font-size: 16px; }
+  .service .price { text-align: right; font-weight: 600; font-size: 18px; }
+  .service .price small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; }
+
+  /* projekty */
+  .projects { display: grid; gap: 64px; }
+  .project { display: grid; grid-template-columns: 1.15fr 1fr; gap: 44px; align-items: center; }
+  .project:nth-child(even) .shot { order: 2; }
+  .shot { display: block; border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--white); box-shadow: 0 24px 48px -32px rgba(21,35,59,.4); }
+  .shot img { display: block; width: 100%; height: auto; aspect-ratio: 16 / 10; object-fit: cover; object-position: top; }
+  .project h3 { font-size: 26px; line-height: 1.2; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .project dl { margin: 0 0 20px; display: grid; gap: 10px; }
+  .project dt { font-weight: 600; font-size: 15px; }
+  .project dd { margin: 0; color: var(--ink-2); font-size: 16px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 20px; padding: 0; list-style: none; }
+  .tags li { font-size: 13px; color: var(--ink-2); background: var(--white); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 8px; }
+  .links { display: flex; flex-wrap: wrap; gap: 18px; font-weight: 600; font-size: 16px; }
+  .links a { color: var(--green); text-underline-offset: 4px; }
+
+  /* proces */
+  .process { list-style: none; padding: 0; margin: 0; counter-reset: k; display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  .process li { counter-increment: k; border-top: 2px solid var(--ink); padding-top: 16px; }
+  .process li::before { content: counter(k); font-family: var(--mono); font-size: 14px; color: var(--muted); display: block; margin-bottom: 8px; }
+  .process h3 { font-size: 19px; margin: 0 0 6px; }
+  .process p { margin: 0; color: var(--ink-2); font-size: 16px; }
+
+  /* kontakt */
+  .contact { background: var(--ink); color: var(--white); padding: 80px 0; }
+  .contact h2 { font-size: clamp(30px, 3.6vw, 44px); letter-spacing: -0.015em; line-height: 1.15; margin: 0 0 14px; max-width: 22ch; }
+  .contact p { color: #C6CFDC; max-width: 52ch; margin: 0 0 28px; font-size: 18px; }
+  .contact .mail { font-size: clamp(20px, 3vw, 30px); font-weight: 600; color: var(--white); text-decoration-color: var(--green); text-underline-offset: 8px; text-decoration-thickness: 3px; word-break: break-all; }
+  .contact .other { margin-top: 26px; display: flex; gap: 22px; font-size: 16px; }
+  .contact .other a { color: #C6CFDC; }
+  footer { background: var(--ink); color: #8A97AA; font-size: 14px; padding: 0 0 28px; }
+
+  @media (max-width: 900px) {
+    .top nav a { display: none; }
+    .hero, .project { grid-template-columns: 1fr; gap: 36px; }
+    .project:nth-child(even) .shot { order: 0; }
+    .service { grid-template-columns: 1fr; gap: 8px; }
+    .service .price { text-align: left; }
+    .process { grid-template-columns: 1fr 1fr; }
+    section.block { padding: 60px 0; }
+    .hero { padding: 24px 0 64px; }
+  }
+  @media (max-width: 520px) {
+    .process { grid-template-columns: 1fr; }
+    .sheet table { font-size: 11.5px; }
+    .sheet td, .sheet th { padding: 6px 6px; }
+    .sheet .hide-xs { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .sheet td { transition: none; } }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <a class="name" href="#">Antoni Kryk</a>
+    <nav aria-label="Główna">
+      <a href="#uslugi"><span lang="pl">Usługi</span><span lang="en">Services</span></a>
+      <a href="#projekty"><span lang="pl">Projekty</span><span lang="en">Work</span></a>
+      <a href="#kontakt"><span lang="pl">Kontakt</span><span lang="en">Contact</span></a>
+      <span class="lang" role="group" aria-label="Język / Language">
+        <button type="button" data-lang="pl" aria-pressed="true">PL</button>
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+      </span>
+    </nav>
+  </header>
+
+  <main>
+  <section class="hero">
+    <div>
+      <h1>
+        <span lang="pl">Zamieniam bałagan w Excelu w raporty, które robią się same.</span>
+        <span lang="en">I turn messy spreadsheets into reports that build themselves.</span>
+      </h1>
+      <p class="lead">
+        <span lang="pl">Automatyzuję raporty w Excelu i Pythonie, buduję dashboardy i strony dla małych firm. Studiuję data science na Politechnice Poznańskiej.</span>
+        <span lang="en">I automate Excel and Python reporting, build dashboards and make websites for small businesses. Data science student at Poznań University of Technology.</span>
+      </p>
+      <div class="ctas">
+        <a class="btn btn-main js-mail" href="#kontakt"><span lang="pl">Opisz swój problem</span><span lang="en">Tell me about your project</span></a>
+        <a class="btn btn-ghost" href="#projekty"><span lang="pl">Zobacz projekty</span><span lang="en">See my work</span></a>
+      </div>
+      <p class="avail"><span lang="pl">Przyjmuję nowe zlecenia. Odpowiadam w ciągu 24 godzin.</span><span lang="en">Taking new projects. I reply within 24 hours.</span></p>
+    </div>
+
+    <figure class="sheet" style="margin:0" aria-label="Przykład czyszczenia danych">
+      <div class="sheet-bar">
+        <span class="file">sprzedaz_oddzialy.xlsx</span>
+        <span class="seg" role="group" aria-label="Widok danych">
+          <button type="button" data-view="before" aria-pressed="true"><span lang="pl">Przed</span><span lang="en">Before</span></button>
+          <button type="button" data-view="after" aria-pressed="false"><span lang="pl">Po</span><span lang="en">After</span></button>
+        </span>
+      </div>
+      <table>
+        <thead><tr><th><span lang="pl">Data</span><span lang="en">Date</span></th><th><span lang="pl">Produkt</span><span lang="en">Product</span></th><th class="hide-xs"><span lang="pl">Szt.</span><span lang="en">Qty</span></th><th><span lang="pl">Kwota</span><span lang="en">Amount</span></th></tr></thead>
+        <tbody id="sheetBody"></tbody>
+      </table>
+      <figcaption class="sheet-foot">
+        <span id="sheetStatus"></span>
+        <button class="replay" type="button" id="replay"><span lang="pl">Odtwórz</span><span lang="en">Replay</span></button>
+      </figcaption>
+    </figure>
+  </section>
+  </main>
+</div>
+
+<section class="block" id="uslugi" aria-labelledby="h-uslugi">
+  <div class="wrap">
+    <h2 id="h-uslugi"><span lang="pl">W czym mogę pomóc</span><span lang="en">What I can do for you</span></h2>
+    <p class="intro"><span lang="pl">Ceny są orientacyjne. Dokładną wycenę dostajesz po krótkiej rozmowie, zanim zaczniemy.</span><span lang="en">Prices are a starting point. You get a fixed quote after a short call, before any work begins.</span></p>
+    <div class="services">
+      <div class="service">
+        <h3><span lang="pl">Automatyzacja raportów</span><span lang="en">Report automation</span></h3>
+        <div>
+          <p><span lang="pl">Raport, który ktoś co tydzień skleja ręcznie, generuje się jednym kliknięciem.</span><span lang="en">The report someone builds by hand every week, generated in one click.</span></p>
+          <ul>
+            <li><span lang="pl">łączenie i czyszczenie wielu plików Excel i CSV</span><span lang="en">merging and cleaning multiple Excel and CSV files</span></li>
+            <li><span lang="pl">gotowy raport z wykresami i formułami</span><span lang="en">finished report with charts and live formulas</span></li>
+            <li><span lang="pl">przenoszenie danych z PDF do arkusza</span><span lang="en">pulling data out of PDFs into spreadsheets</span></li>
+          </ul>
+        </div>
+        <div class="price"><span lang="pl">od 400 zł</span><span lang="en">from $100</span><small><span lang="pl">3–7 dni</span><span lang="en">3–7 days</span></small></div>
+      </div>
+      <div class="service">
+        <h3><span lang="pl">Dashboardy</span><span lang="en">Dashboards</span></h3>
+        <div>
+          <p><span lang="pl">Sprzedaż, magazyn albo wyniki zespołu na jednej stronie, z filtrami.</span><span lang="en">Sales, stock or team results on one page, with filters.</span></p>
+          <ul>
+            <li><span lang="pl">działa w przeglądarce, bez instalowania programów</span><span lang="en">runs in the browser, nothing to install</span></li>
+            <li><span lang="pl">odświeżanie z Twoich plików albo arkusza Google</span><span lang="en">refreshes from your files or Google Sheet</span></li>
+          </ul>
+        </div>
+        <div class="price"><span lang="pl">od 600 zł</span><span lang="en">from $150</span><small><span lang="pl">5–10 dni</span><span lang="en">5–10 days</span></small></div>
+      </div>
+      <div class="service">
+        <h3><span lang="pl">Strony dla lokalnych firm</span><span lang="en">Small business websites</span></h3>
+        <div>
+          <p><span lang="pl">Szybka strona z cennikiem, mapą i formularzem, dobrze wyglądająca na telefonie.</span><span lang="en">A fast site with prices, map and contact form that works well on phones.</span></p>
+          <ul>
+            <li><span lang="pl">hosting bez opłat miesięcznych, płacisz tylko za domenę</span><span lang="en">no monthly hosting fees, you only pay for the domain</span></li>
+            <li><span lang="pl">opcjonalna opieka i drobne zmiany w abonamencie</span><span lang="en">optional care plan for updates</span></li>
+          </ul>
+        </div>
+        <div class="price"><span lang="pl">od 900 zł</span><span lang="en">from $250</span><small><span lang="pl">5–10 dni</span><span lang="en">5–10 days</span></small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="projekty" aria-labelledby="h-proj">
+  <div class="wrap">
+    <h2 id="h-proj"><span lang="pl">Projekty</span><span lang="en">Selected work</span></h2>
+    <p class="intro"><span lang="pl">Każdy projekt można otworzyć i przetestować. Dane i firmy są fikcyjne, problemy prawdziwe.</span><span lang="en">Every project is live and clickable. The data and companies are fictional; the problems are real.</span></p>
+    <div class="projects">
+
+      <article class="project">
+        <a class="shot" href="projekty/raport-sprzedazy/"><img src="assets/raport.jpg" alt="Wygenerowany raport sprzedaży w Excelu z tabelami i KPI" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Automatyczny raport sprzedaży</span><span lang="en">Automated sales report</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Trzy oddziały wysyłają sprzedaż w różnych formatach: inne kolumny, daty, literówki, duplikaty. Ktoś skleja to ręcznie co miesiąc.</span><span lang="en">Three branches send sales data in different formats: different columns, dates, typos, duplicates. Someone merges it by hand every month.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Skrypt w Pythonie czyści 1 300 transakcji i tworzy raport Excel z wykresami, rankingiem i logiem poprawek.</span><span lang="en">A Python script cleans 1,300 transactions and builds an Excel report with charts, rankings and a log of every fix.</span></dd>
+            <dt><span lang="pl">Efekt</span><span lang="en">Result</span></dt>
+            <dd><span lang="pl">Kilka godzin pracy zamienione na kilka sekund.</span><span lang="en">Hours of manual work reduced to seconds.</span></dd>
+          </dl>
+          <ul class="tags"><li>Python</li><li>pandas</li><li>openpyxl</li><li>Excel</li></ul>
+          <div class="links">
+            <a href="projekty/raport-sprzedazy/"><span lang="pl">Opis i kod</span><span lang="en">Write-up and code</span></a>
+            <a href="projekty/raport-sprzedazy/raport_sprzedazy.xlsx" download><span lang="pl">Pobierz raport (.xlsx)</span><span lang="en">Download report (.xlsx)</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <a class="shot" href="projekty/dashboard/"><img src="assets/dashboard.jpg" alt="Dashboard sprzedaży z filtrami, wykresem liniowym i rankingiem produktów" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Interaktywny dashboard sprzedaży</span><span lang="en">Interactive sales dashboard</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Właściciel chce w minutę sprawdzić, który oddział i produkt ciągnie wynik, bez otwierania Excela.</span><span lang="en">The owner wants to see in a minute which branch and product drive results, without opening Excel.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Strona z filtrami oddziału, okresu i produktu. Wykresy i ranking handlowców liczą się na żywo.</span><span lang="en">A web page with branch, period and product filters. Charts and the sales-rep ranking update live.</span></dd>
+          </dl>
+          <ul class="tags"><li>JavaScript</li><li>SVG</li><li>Python</li></ul>
+          <div class="links">
+            <a href="projekty/dashboard/"><span lang="pl">Otwórz dashboard</span><span lang="en">Open dashboard</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="project">
+        <a class="shot" href="projekty/warsztat/"><img src="assets/warsztat.jpg" alt="Strona warsztatu samochodowego z formularzem rezerwacji i tablicą rejestracyjną" loading="lazy"></a>
+        <div>
+          <h3><span lang="pl">Strona warsztatu samochodowego</span><span lang="en">Car repair shop website</span></h3>
+          <dl>
+            <dt><span lang="pl">Problem</span><span lang="en">Problem</span></dt>
+            <dd><span lang="pl">Lokalny warsztat odbiera wszystkie zapytania telefonicznie i nie ma cennika w sieci.</span><span lang="en">A local garage takes every enquiry by phone and has no prices online.</span></dd>
+            <dt><span lang="pl">Rozwiązanie</span><span lang="en">Solution</span></dt>
+            <dd><span lang="pl">Strona z cennikiem, mapą i formularzem wizyty, w którym wpisuje się numer rejestracyjny jak na tablicy.</span><span lang="en">A site with prices, a map and a booking form where you type your plate number on a real-looking plate.</span></dd>
+          </dl>
+          <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>RWD</li></ul>
+          <div class="links">
+            <a href="projekty/warsztat/"><span lang="pl">Otwórz stronę</span><span lang="en">Open website</span></a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section class="block" aria-labelledby="h-proc">
+  <div class="wrap">
+    <h2 id="h-proc"><span lang="pl">Jak pracuję</span><span lang="en">How I work</span></h2>
+    <p class="intro"><span lang="pl">Bez niespodzianek w cenie i terminie.</span><span lang="en">No surprises on price or deadline.</span></p>
+    <ol class="process">
+      <li><h3><span lang="pl">Rozmowa</span><span lang="en">Short call</span></h3><p><span lang="pl">Opowiadasz, co Ci zabiera czas. Możesz wysłać przykładowy plik.</span><span lang="en">You tell me what eats your time. Send a sample file if you have one.</span></p></li>
+      <li><h3><span lang="pl">Wycena na piśmie</span><span lang="en">Written quote</span></h3><p><span lang="pl">Dostajesz zakres, cenę i termin. Zaczynam po Twojej akceptacji.</span><span lang="en">You get scope, price and deadline. I start once you approve.</span></p></li>
+      <li><h3><span lang="pl">Wykonanie</span><span lang="en">Build</span></h3><p><span lang="pl">W trakcie pokazuję postępy, żebyś mógł wcześnie zgłosić uwagi.</span><span lang="en">I share progress along the way so you can give feedback early.</span></p></li>
+      <li><h3><span lang="pl">Oddanie i poprawki</span><span lang="en">Handover</span></h3><p><span lang="pl">Gotowe rozwiązanie z instrukcją i 14 dniami bezpłatnych poprawek.</span><span lang="en">Finished work with instructions and 14 days of free fixes.</span></p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="contact" id="kontakt" aria-labelledby="h-k">
+  <div class="wrap">
+    <h2 id="h-k"><span lang="pl">Masz plik, który co tydzień poprawiasz ręcznie?</span><span lang="en">Got a spreadsheet you fix by hand every week?</span></h2>
+    <p><span lang="pl">Napisz, co to za plik i co ma z niego wychodzić. Odpowiem w ciągu 24 godzin z pomysłem i orientacyjną ceną.</span><span lang="en">Tell me what the file is and what you need out of it. I'll reply within 24 hours with an approach and a ballpark price.</span></p>
+    <a class="mail js-mail" href="#"></a>
+    <div class="other">
+      <a class="js-github" href="#">GitHub</a>
+      <a class="js-linkedin" href="#">LinkedIn</a>
+    </div>
+  </div>
+</section>
+<footer><div class="wrap">© 2026 Antoni Kryk · Poznań</div></footer>
+
+<script>
+  // ====== TWOJE DANE – zmień tutaj ======
+  const EMAIL = "antonikryk2310@gmail.com";
+  const GITHUB = "https://github.com/A2K600";        // np. https://github.com/antonikryk
+  const LINKEDIN = "";                          // zostaw puste, jeśli nie masz
+  // ======================================
+
+  document.querySelectorAll('.js-mail').forEach(a => { a.href = 'mailto:' + EMAIL; if (a.classList.contains('mail')) a.textContent = EMAIL; });
+  document.querySelectorAll('.js-github').forEach(a => a.href = GITHUB);
+  document.querySelectorAll('.js-linkedin').forEach(a => LINKEDIN ? a.href = LINKEDIN : a.remove());
+
+  // ----- przełącznik języka -----
+  const setLang = (l) => {
+    document.documentElement.className = l; document.documentElement.lang = l;
+    document.querySelectorAll('.lang button').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === l));
+    try { localStorage.setItem('lang', l); } catch (e) {}
+    renderSheet(view);
+  };
+  document.querySelectorAll('.lang button').forEach(b => b.onclick = () => setLang(b.dataset.lang));
+
+  // ----- arkusz przed / po -----
+  // [przed: data, produkt, szt, kwota] → [po: ...], dup = duplikat do usunięcia
+  const ROWS = [
+    { b: ['05.03.2026', 'Mlynek reczny', '2', '258,00 zł'], a: ['2026-03-05', 'Młynek ręczny', '2', '258,00'] },
+    { b: ['5/3/2026', 'KAWA ZIARNISTA 1KG', '3', '267'], a: ['2026-03-05', 'Kawa ziarnista 1kg', '3', '267,00'] },
+    { b: ['2026-03-06', 'Ekspres przelew.', '1', '349.0'], a: ['2026-03-06', 'Ekspres przelewowy', '1', '349,00'] },
+    { b: ['2026-03-06', 'Ekspres przelew.', '1', '349.0'], dup: true },
+    { b: ['07.03.2026', 'herbata zielona ', '4', '74,00 zł'], a: ['2026-03-07', 'Herbata zielona', '4', '74,00'] },
+    { b: ['8/3/2026', 'Kubek termiczny', '', '59'], drop: true },
+  ];
+  const body = document.getElementById('sheetBody'), status = document.getElementById('sheetStatus');
+  let view = 'before', timers = [];
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const T = {
+    pl: { before: 'Przed: <b>6 wierszy</b>, 4 formaty dat, literówki', after: 'Po: <b>4 czyste wiersze</b>, 1 duplikat i 1 błędny usunięte', fixing: 'Czyszczę dane…' },
+    en: { before: 'Before: <b>6 rows</b>, 4 date formats, typos', after: 'After: <b>4 clean rows</b>, 1 duplicate and 1 bad row removed', fixing: 'Cleaning…' },
+  };
+  const lang = () => document.documentElement.classList.contains('en') ? 'en' : 'pl';
+
+  function renderSheet(v) {
+    view = v; timers.forEach(clearTimeout); timers = [];
+    document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === v));
+    body.innerHTML = ROWS.map((r, i) => {
+      const cells = (v === 'after' && r.a) ? r.a : r.b;
+      const cls = (v === 'after' && (r.dup || r.drop)) ? ' class="gone"' : '';
+      return `<tr${cls} data-i="${i}">` + cells.map((c, k) => {
+        const messy = v === 'before' && r.a ? c !== r.a[k] : (v === 'before' && (r.dup || r.drop) && (r.drop ? k === 2 : true));
+        return `<td class="${k >= 2 ? 'num' : ''}${k === 2 ? ' hide-xs' : ''}${messy ? ' messy' : ''}">${c || '<span style="color:#B3261E">?</span>'}</td>`;
+      }).join('') + '</tr>';
+    }).join('');
+    status.innerHTML = T[lang()][v];
+  }
+
+  function animate() {
+    renderSheet('before');
+    if (reduce) { renderSheet('after'); return; }
+    status.textContent = T[lang()].fixing;
+    let t = 700;
+    ROWS.forEach((r, i) => {
+      const tr = body.querySelector(`tr[data-i="${i}"]`);
+      timers.push(setTimeout(() => {
+        if (r.dup || r.drop) { tr.classList.add('dup'); timers.push(setTimeout(() => tr.classList.add('gone'), 600)); return; }
+        [...tr.children].forEach((td, k) => {
+          if (td.textContent !== r.a[k]) { td.textContent = r.a[k]; td.classList.remove('messy'); td.classList.add('fixed'); timers.push(setTimeout(() => td.classList.remove('fixed'), 900)); }
+        });
+      }, t));
+      t += 420;
+    });
+    timers.push(setTimeout(() => { view = 'after'; status.innerHTML = T[lang()].after; document.querySelectorAll('.seg button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === 'after')); }, t + 500));
+  }
+  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => renderSheet(b.dataset.view));
+  document.getElementById('replay').onclick = animate;
+
+  let saved = 'pl'; try { saved = localStorage.getItem('lang') || (navigator.language.startsWith('pl') ? 'pl' : 'en'); } catch (e) {}
+  setLang(saved);
+  // animacja raz, gdy arkusz pojawi się na ekranie
+  const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { animate(); io.disconnect(); } }, { threshold: 0.4 });
+  io.observe(document.querySelector('.sheet'));
+</script>
+</body>
+</html>
